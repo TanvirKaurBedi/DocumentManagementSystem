@@ -11,6 +11,12 @@ const routes = [
         meta: { requiresAuth: false, title: "Login", show_back_btn: false },
         component: Login,
     },
+    {
+        path: "/",
+        name: "file_management_page",
+        meta: { requiresAuth: false, title: "File Management", show_back_btn: false },
+        component: Login,
+    },
 ]
 
 const router = new VueRouter({
