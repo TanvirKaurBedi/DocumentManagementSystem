@@ -31,19 +31,7 @@
                                         prepend-inner-icon :rules="[$rules.mobile_number]" maxLength="10">
                                         <template #prepend-inner>
                                             <v-img :src="selected_flag" class="flag_img"></v-img> &nbsp;
-                                            {{ selected_phone_code }} &nbsp;
-                                            <v-menu offset-y>
-                                                <template v-slot:activator="{ on, attrs }">
-                                                    <v-icon v-bind="attrs" v-on="on">mdi-chevron-down</v-icon>
-                                                </template>
-                                                <v-list>
-                                                    <v-list-item v-for="(item, index) in phone_code_list" :key="index"
-                                                        @click="selectPhoneCode(item)">
-                                                        <v-list-item-title>{{ item.phone_code }} {{ item.name
-                                                            }}</v-list-item-title>
-                                                    </v-list-item>
-                                                </v-list>
-                                            </v-menu>
+                                            {{ selected_phone_code }}
                                         </template>
                                     </v-text-field>
                                     <!-- text-field -->
@@ -177,9 +165,9 @@ export default {
             const successHandler = () => {
                 this.verify_btn_loader = false
                 this.$router.push({
-                    name:"/file_management_page"
+                    name: "file_management"
                 })
-           }
+            }
             const failureHandler = (error) => {
                 if (error) {
                     this.otp_field = ""

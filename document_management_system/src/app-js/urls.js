@@ -1,7 +1,8 @@
 const URLS = {
     BASE_URL: "https://apis.allsoft.co/api/documentManagement",
     GENERATE_OTP :"generateOTP",
-    VERIFY_OTP:"validateOTP"
+    VERIFY_OTP:"validateOTP",
+    SAVE_DOCUMENTARY:"saveDocumentEntry"
   
   };
   export default URLS;
