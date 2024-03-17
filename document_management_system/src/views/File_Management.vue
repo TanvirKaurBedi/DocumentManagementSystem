@@ -19,13 +19,13 @@
         </v-row>
         <v-row>
             <v-col md="12">
-                <v-card elevation="2" class="px-5 my-md-5 main_card">
+                <v-card elevation="2" class="px-5 my-md-5 main_card d-flex flex-column align-center justify-center">
                     <v-card-title>
                         Upload Files Here
                     </v-card-title>
                     <div class="file_main_div ma-5 d-flex">
                         <div v-for="item in file_array" :key="item.index">
-                            <template v-if="item.type === 'image'">
+                            <template>
                                 <v-img :src="item.url" class="image_div ma-5 d-flex justify-right">
                                     <div class="delete_div pa-4 d-flex align-center justify-center"
                                         style="position: relative;" @click="deleteMedia(item)">
@@ -33,18 +33,15 @@
                                     </div>
                                 </v-img>
                             </template>
-                            <template v-else>
-                                <video :src="item.url" controls class="video_div ma-5"></video>
-                            </template>
                         </div>
                         <div class="file_div ma-5 text-center d-flex flex-column align-center justify-center"
                             @click="triggerInputField()">
                             <v-icon color="black" class="file_upload_icon mb-2" large>mdi-file-upload-outline</v-icon>
-                            <p>Upload your File here or <span class="browse_btn">browse</span></p>
+                            <p>Upload your file here or <span class="browse_btn">browse</span></p>
                         </div>
-                        <input @change="fileChangeHandle()" accept="video/*,image/*" type="file"
-                            ref="file_uploading_field" style="visibility: hidden;" />
                     </div>
+                    <input @change="fileChangeHandle()" accept="video/*,image/*" type="file" ref="file_uploading_field"
+                        style="visibility: hidden;" />
                 </v-card>
             </v-col>
         </v-row>
