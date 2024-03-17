@@ -17,26 +17,41 @@
                 </v-select>
             </v-col>
         </v-row>
+        <v-row>
+            <v-col>
+                
+            </v-col>
+        </v-row>
         <!--  -->
         <v-row class="file_row">
-            <v-col md="12">{{ file_url }}
+            <v-col md="12">
                 <v-card elevation="2" class="px-5 my-md-5 main_card d-flex flex-column align-center justify-center">
                     <v-card-title>
                         Upload Files Here
                     </v-card-title>
-                        <div v-if="file_url">
-                            <v-img :src="file_url" class="image_div ma-5 d-flex justify-right">
-                                <div class="delete_div pa-4 d-flex align-center justify-center"
-                                    style="position: relative;" @click="deleteMedia(item)">
+                    <div v-if="file_url">
+                        <template v-if="file_type === 'application/pdf'">
+                            <v-img src="../assets/pdfIMg.png" class="ma-5 d-flex justify-right">
+                                <div class="delete_div image_div ma-1  d-flex align-center justify-center"
+                                    style="position: relative; left:290px" @click="deleteMedia(item)">
                                     <v-icon color="red">mdi-delete-outline</v-icon>
                                 </div>
                             </v-img>
-                        </div>
-                        <div v-else class="image_div ma-5 text-center d-flex flex-column align-center justify-center"
-                            @click="triggerInputField()">
-                            <v-icon color="black" class="file_upload_icon mb-2" large>mdi-file-upload-outline</v-icon>
-                            <p>Upload your file here or <span class="browse_btn">browse</span></p>
-                        </div>
+                        </template>
+                        <template v-else>
+                            <v-img :src="file_url" class="image_div ma-5 d-flex justify-right">
+                                <div class="delete_div ma-1  d-flex align-center justify-center"
+                                    style="position: relative; left:290px" @click="deleteMedia(item)">
+                                    <v-icon color="red">mdi-delete-outline</v-icon>
+                                </div>
+                            </v-img>
+                        </template>
+                    </div>
+                    <div v-else class="image_div ma-5 text-center d-flex flex-column align-center justify-center"
+                        @click="triggerInputField()">
+                        <v-icon color="black" class="file_upload_icon mb-2" large>mdi-file-upload-outline</v-icon>
+                        <p>Upload your file here or <span class="browse_btn">browse</span></p>
+                    </div>
                     <input @change="fileChangeHandle()" accept=".pdf,image/*" type="file" ref="file_uploading_field"
                         style="visibility: hidden;" />
                 </v-card>
@@ -62,7 +77,8 @@ export default {
             names_items: ["John", "Tanvir", "Simran", "Aman", "Sheema"],
             department_items: ["Hr", "Accounts", "IT", "Finance"],
             names_list_flag: false,
-            remarks: ""
+            remarks: "",
+            file_type:""
         }
     },
     methods: {
@@ -72,9 +88,12 @@ export default {
         fileChangeHandle() {
             this.uploadFile();
         },
+        deleteMedia() {
+            this.file_url = ""
+        },
         uploadFile() {
             this.selected_file = this.$refs.file_uploading_field.files[0];
-
+            this.file_type = this.selected_file.type 
             const reader = new FileReader();
             reader.onload = (event) => {
                 this.file_url = event.target.result;
@@ -127,11 +146,19 @@ export default {
 }
 </script>
 <style scoped>
-.image_div{
+.image_div {
     max-width: 346px !important;
     max-height: 258px !important
 }
-.file_row{
+
+.file_row {
     max-width: 447px !important;
+    /* max-height:258px !important */
+}
+.delete_div{
+    background-color: white;
+    cursor:pointer;
+    width:50px;
+    height:44px;
 }
 </style>
