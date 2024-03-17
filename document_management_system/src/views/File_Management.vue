@@ -17,34 +17,32 @@
                 </v-select>
             </v-col>
         </v-row>
-        <v-row>
-            <v-col md="12">
+        <!--  -->
+        <v-row class="file_row">
+            <v-col md="12">{{ file_url }}
                 <v-card elevation="2" class="px-5 my-md-5 main_card d-flex flex-column align-center justify-center">
                     <v-card-title>
                         Upload Files Here
                     </v-card-title>
-                    <div class="file_main_div ma-5 d-flex">
-                        <div v-for="item in file_array" :key="item.index">
-                            <template>
-                                <v-img :src="item.url" class="image_div ma-5 d-flex justify-right">
-                                    <div class="delete_div pa-4 d-flex align-center justify-center"
-                                        style="position: relative;" @click="deleteMedia(item)">
-                                        <v-icon color="red">mdi-delete-outline</v-icon>
-                                    </div>
-                                </v-img>
-                            </template>
+                        <div v-if="file_url">
+                            <v-img :src="file_url" class="image_div ma-5 d-flex justify-right">
+                                <div class="delete_div pa-4 d-flex align-center justify-center"
+                                    style="position: relative;" @click="deleteMedia(item)">
+                                    <v-icon color="red">mdi-delete-outline</v-icon>
+                                </div>
+                            </v-img>
                         </div>
-                        <div class="file_div ma-5 text-center d-flex flex-column align-center justify-center"
+                        <div v-else class="image_div ma-5 text-center d-flex flex-column align-center justify-center"
                             @click="triggerInputField()">
                             <v-icon color="black" class="file_upload_icon mb-2" large>mdi-file-upload-outline</v-icon>
                             <p>Upload your file here or <span class="browse_btn">browse</span></p>
                         </div>
-                    </div>
-                    <input @change="fileChangeHandle()" accept="video/*,image/*" type="file" ref="file_uploading_field"
+                    <input @change="fileChangeHandle()" accept=".pdf,image/*" type="file" ref="file_uploading_field"
                         style="visibility: hidden;" />
                 </v-card>
             </v-col>
         </v-row>
+        <!--  -->
         <v-row>
             <v-textarea auto-grow outlined placeholder="add you remarks here" v-model="remarks"
                 prepend-inner-icon="mdi-comment" rows="1" row-height="15">
@@ -128,4 +126,12 @@ export default {
     }
 }
 </script>
-<style scoped></style>
+<style scoped>
+.image_div{
+    max-width: 346px !important;
+    max-height: 258px !important
+}
+.file_row{
+    max-width: 447px !important;
+}
+</style>
