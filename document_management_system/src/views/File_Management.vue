@@ -19,7 +19,22 @@
         </v-row>
         <v-row>
             <v-col>
-                
+                <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="date"
+                    transition="scale-transition" offset-y min-width="auto">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-text-field outlined dense v-model="date" label="Picker in menu" prepend-inner-icon="mdi-calendar" readonly
+                            v-bind="attrs" v-on="on"></v-text-field>
+                    </template>
+                    <v-date-picker v-model="date" no-title scrollable>
+                        <v-spacer></v-spacer>
+                        <v-btn text color="primary" @click="menu = false">
+                            Cancel
+                        </v-btn>
+                        <v-btn text color="primary" @click="$refs.menu.save(date)">
+                            OK
+                        </v-btn>
+                    </v-date-picker>
+                </v-menu>
             </v-col>
         </v-row>
         <!--  -->
@@ -78,7 +93,9 @@ export default {
             department_items: ["Hr", "Accounts", "IT", "Finance"],
             names_list_flag: false,
             remarks: "",
-            file_type:""
+            file_type: "",
+            date:"",
+            menu:null
         }
     },
     methods: {
@@ -93,7 +110,7 @@ export default {
         },
         uploadFile() {
             this.selected_file = this.$refs.file_uploading_field.files[0];
-            this.file_type = this.selected_file.type 
+            this.file_type = this.selected_file.type
             const reader = new FileReader();
             reader.onload = (event) => {
                 this.file_url = event.target.result;
@@ -155,10 +172,11 @@ export default {
     max-width: 447px !important;
     /* max-height:258px !important */
 }
-.delete_div{
+
+.delete_div {
     background-color: white;
-    cursor:pointer;
-    width:50px;
-    height:44px;
+    cursor: pointer;
+    width: 50px;
+    height: 44px;
 }
 </style>
