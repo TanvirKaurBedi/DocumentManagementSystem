@@ -19,8 +19,6 @@
                                     <p class="signin_text">Sign In</p>
                                     <p class="sub_text_1 mb-0 mt-5">Enter Your Mobile Number</p>
                                 </div>
-                                <p class="sub_text_2 mt-4">BrushCircle will send you a one time password to your registered
-                                    Mobile Number</p>
                             </div>
                         </v-card-text>
                         <v-card-text class="d-flex justify-center mt-n5">
@@ -28,11 +26,10 @@
                                 <p class="sub_text_3 mb-1">Mobile number</p>
                                 <v-form ref="login_form">
                                     <!-- text-field -->
-                                    <v-text-field dense outlined placeholder="Please enter mobile number"
+                                    <v-text-field @keypress="isNumber($event)" dense outlined placeholder="Please enter mobile number"
                                         class="md-mr-0 mr-2" v-model="mobile" prepend-inner-icon
-                                        :rules="[$rules.mobile_number]">
+                                        :rules="[$rules.mobile_number]" maxLength="10">
                                         <template #prepend-inner>
-                                            <!-- {{ selected_flag }} -->
                                             <v-img :src="selected_flag" class="flag_img"></v-img> &nbsp;
                                             {{ selected_phone_code }} &nbsp;
                                             <v-menu offset-y>
@@ -63,11 +60,11 @@
                                 </div>
                                 <div class="text-center mt-2 footer_text_2">
                                     By Continuing,you agree to our
-                                    <span color="black" @click="openTermsOfService">
+                                    <span color="black">
                                         Terms of Service
                                     </span>
                                     and
-                                    <span @click="openPrivacyPolicy">
+                                    <span>
                                         Privacy Policy
                                     </span>
                                 </div>
@@ -107,7 +104,6 @@
                 </v-col>
             </v-row>
         </v-container>
-        <SnackBar></SnackBar>
     </v-app>
 </template>
 <script>
@@ -261,7 +257,6 @@ export default {
       
     },
     mounted() {
-        this.getListOfPhoneCodes();
     }
 }
 // }
