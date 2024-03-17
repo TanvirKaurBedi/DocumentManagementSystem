@@ -49,9 +49,9 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-text-area v-model="remarks">
-
-            </v-text-area>
+            <v-textarea auto-grow outlined placeholder="add you remarks here" v-model="remarks"
+                prepend-inner-icon="mdi-comment" rows="1" row-height="15">
+            </v-textarea>
         </v-row>
     </v-container>
 </template>
@@ -67,6 +67,7 @@ export default {
             names_items: ["John", "Tanvir", "Simran", "Aman", "Sheema"],
             department_items: ["Hr", "Accounts", "IT", "Finance"],
             names_list_flag: false,
+            remarks: ""
         }
     },
     methods: {
