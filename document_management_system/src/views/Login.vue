@@ -26,9 +26,9 @@
                                 <p class="sub_text_3 mb-1">Mobile number</p>
                                 <v-form ref="login_form">
                                     <!-- text-field -->
-                                    <v-text-field @keypress="isNumber($event)" dense outlined placeholder="Please enter mobile number"
-                                        class="md-mr-0 mr-2" v-model="mobile" prepend-inner-icon
-                                        :rules="[$rules.mobile_number]" maxLength="10">
+                                    <v-text-field @keypress="isNumber($event)" dense outlined
+                                        placeholder="Please enter mobile number" class="md-mr-0 mr-2" v-model="mobile"
+                                        prepend-inner-icon :rules="[$rules.mobile_number]" maxLength="10">
                                         <template #prepend-inner>
                                             <v-img :src="selected_flag" class="flag_img"></v-img> &nbsp;
                                             {{ selected_phone_code }} &nbsp;
@@ -40,7 +40,7 @@
                                                     <v-list-item v-for="(item, index) in phone_code_list" :key="index"
                                                         @click="selectPhoneCode(item)">
                                                         <v-list-item-title>{{ item.phone_code }} {{ item.name
-                                                        }}</v-list-item-title>
+                                                            }}</v-list-item-title>
                                                     </v-list-item>
                                                 </v-list>
                                             </v-menu>
@@ -54,7 +54,8 @@
                                 </v-btn>
 
                                 <div class="d-flex align-center justify-center">
-                                    <div class="footer_text_1 mt-3" @click="navigateToSignUpPage()">Don't have an account ?
+                                    <div class="footer_text_1 mt-3" @click="navigateToSignUpPage()">Don't have an
+                                        account ?
                                         <span class="create_acc_text">Create Account</span>
                                     </div>
                                 </div>
@@ -79,8 +80,8 @@
                             <v-card-text class="sub_div_1 d-flex flex-column align-center justify-center">
                                 <p class="sub_text_1 mb-0">Enter verification code</p>
                                 <p class="sub_text_2 mt-2 mb-0">The verification code has been sent to
-                                  </p>
-                                  <p>+91 {{ mobile }}</p> 
+                                </p>
+                                <p>+91 {{ mobile }}</p>
                             </v-card-text>
                             <v-card-text class="sub_div_2 mt-n2">
                                 <p class="mb-0">Enter 6 Digit OTP</p>
@@ -94,9 +95,6 @@
                                     Back
                                 </v-btn>
                                 <div class="d-flex justify-center align-center mt-2">
-                                    <p :class="{ 'disable_resend': is_timer_enable }" class="resend_otp_text"
-                                        @click="send_otp_again()">Resend OTP</p> &nbsp;
-                                    <p class="resend_otp_timer" v-if="is_timer_enable">{{ countDownTimer }} sec</p>
                                 </div>
                             </v-card-text>
                         </div>
@@ -111,16 +109,11 @@ export default {
     name: "Login",
     data() {
         return {
-            is_resend_enable: true,
-            is_timer_enable: false,
-            countDownTimer: null,
             otp_field: "",
             mobile: null,
             send_otp_btn_loader: false,
             verify_btn_loader: false,
             flag: "",
-            country_name: "",
-            phone_code_list: null,
             selected_phone_code: "+91",
             selected_flag: "https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg",
             switch_to_verify_page: false,
@@ -146,115 +139,65 @@ export default {
         },
         // sendOtp api calling
         sendOtp() {
-            // if (this.$refs.login_form.validate()) {
-            //     this.send_otp_btn_loader = true
-            //     // self.get_otp_btn = true;
-            //     var data = {
-            //         "mobile": this.mobile,
-            //         "phone_code": this.selected_phone_code
-            //     }
+            if (this.$refs.login_form.validate()) {
+                this.send_otp_btn_loader = true
+                // self.get_otp_btn = true;
+                var data = {
+                    "mobile_number": this.mobile,
+                }
 
-            //     const successHandler = (response) => {
-            //         this.switch_to_verify_page = true
-            //         console.log("response of send-otp owner", response)
-            //         this.send_otp_btn_loader = false
+                const successHandler = (response) => {
+                    this.switch_to_verify_page = true
+                    console.log("response of send-otp owner", response)
+                    this.send_otp_btn_loader = false
 
-            //     };
-            //     const failureHandler = (error) => {
-            //         if (error) {
-            //             this.send_otp_btn_loader = false;
-            //             this.showSnackBar(error.data.message, "#B3261E", 1000);
-            //             this.mobile = ""
-            //         }
-            //     };
-            //     return this.$axios("post", this.$apiUrl.SEND_OTP_LOGIN, {
-            //         data,
-            //         onSuccess: successHandler,
-            //         onFailure: failureHandler,
-            //         isTokenRequired: false,
-            //     });
-            // }
+                };
+                const failureHandler = (error) => {
+                    if (error) {
+                        this.send_otp_btn_loader = false;
+                        this.showSnackBar(error.data.message, "#B3261E", 1000);
+                        this.mobile = ""
+                    }
+                };
+                return this.$axios("post", this.$apiUrl.GENERATE_OTP, {
+                    data,
+                    onSuccess: successHandler,
+                    onFailure: failureHandler,
+                    isTokenRequired: false,
+                });
+            }
         },
         // verify-otp api calling
         verifyOtp() {
-            // this.verify_btn_loader = true
-            // const data = {
-            //     "phone_code": this.selected_phone_code,
-            //     "mobile": this.mobile,
-            //     "otp": this.otp_field
-            // }
-            // const successHandler = (response) => {
-            //     this.verify_btn_loader = false
-
-            //     // tokens
-            //     var access_token = response.data.token
-            //     var refresh_token = response.data.rtoken
-
-            //     // user details
-            //     let user_name = response.data.response.name;
-            //     let mobile = response.data.response.mobile;
-            //     let user_id = response.data.response.user_id;
-            //     let role = response.data.response.role;
-
-            //     // parlour details
-            //     let is_staff_added = response.data.response.is_staff_added;
-            //     let is_service_added = response.data.response.is_service_added;
-            //     let parlour_id = response.data.response.parlour_id;
-            //     let is_parlour_registered = response.data.response.is_parlour_registered;
-
-            //     localStorage.setItem("access_token", access_token)
-            //     localStorage.setItem("refresh_token", refresh_token)
-            //     localStorage.setItem("parlour_id", parlour_id)
-            //     localStorage.setItem("user_id", user_id)
-            //     localStorage.setItem("user_role", role)
-            //     localStorage.setItem("is_parlour_registered", is_parlour_registered)
-
-            //     let current_user_details = {
-            //         name: user_name,
-            //         number: mobile,
-            //         role: role,
-            //         user_id: user_id,
-            //     }
-            //     let parlour_details = {
-            //         parlour_id: parlour_id,
-            //         is_staff_added: is_staff_added,
-            //         is_service_added: is_service_added,
-            //         is_parlour_registered: is_parlour_registered
-            //     }
-
-
-            //     // storing details in store
-            //     this.$store.dispatch("profile/setUserDetails", current_user_details)
-            //     this.$store.dispatch("profile/setParlourDetails", parlour_details)
-            //     if (is_parlour_registered == true) {
-            //         this.$router.push({
-            //             name: "dashboard"
-            //         })
-            //         this.showSnackBar("Logged In", "success", 1500);
-            //     }
-            //     else {
-            //         this.showSnackBar("Please register your parlour first", "#B3261E");
-            //     }
-            // }
-            // const failureHandler = (error) => {
-            //     if (error) {
-            //         this.showSnackBar("Invalid Otp", "#B3261E", 2000);
-            //         this.otp_field = ""
-            //         this.verify_btn_loader = false
-            //     }
-            // }
-            // const finallyHandler = () => {
-            //     this.verify_btn_loader = false
-            // }
-            // return this.$axios("post", this.$apiUrl.VERIFY_OTP, {
-            //     data,
-            //     onSuccess: successHandler,
-            //     onFailure: failureHandler,
-            //     onFinally: finallyHandler,
-            //     isTokenRequired: false,
-            // });
+            this.verify_btn_loader = true
+            const data = {
+                "mobile_number": this.mobile,
+                "otp": "541983"
+            }
+            const successHandler = () => {
+                this.verify_btn_loader = false
+                this.$router.push({
+                    name:"/file_management_page"
+                })
+           }
+            const failureHandler = (error) => {
+                if (error) {
+                    this.otp_field = ""
+                    this.verify_btn_loader = false
+                }
+            }
+            const finallyHandler = () => {
+                this.verify_btn_loader = false
+            }
+            return this.$axios("post", this.$apiUrl.VERIFY_OTP, {
+                data,
+                onSuccess: successHandler,
+                onFailure: failureHandler,
+                onFinally: finallyHandler,
+                isTokenRequired: false,
+            });
         },
-      
+
     },
     mounted() {
     }
