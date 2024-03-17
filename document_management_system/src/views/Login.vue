@@ -1,14 +1,8 @@
 <template>
     <v-app class="main_div">
         <v-container class="ma-auto">
-            <div>
-                <!-- <v-img src="../../assets/brush_logo.svg" class="logo_img"></v-img> -->
-            </div>
-            <v-row class="d-flex">
-                <v-col md="6">
-                    <!-- <v-img src="../../assets/welcome_img.svg" class="welcome_img" v-if="$isDesktop"></v-img> -->
-                </v-col>
-                <v-col md="6" class="pa-0">
+            <v-row class="d-flex align-center justify-center">
+                <v-col md="12" class="pa-0 d-flex align-center justify-center">
 
                     <!-- send-otp -->
                     <v-card class="signup_form d-flex flex-column justify-center align-center py-10"
@@ -164,6 +158,7 @@ export default {
             }
             const successHandler = () => {
                 this.verify_btn_loader = false
+               localStorage.setItem("access_token","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpcF9hZGRyZXNzIjoiOjoxIiwidW5pcXVlX2lkIjoiOTMwMzAyMDAwNCIsInVzZXJfbmFtZSI6IjkzMDMwMjAwMDQiLCJhY2Nlc3NfdHlwZSI6ImVtcCIsIm1vYmlsZSI6IjkzMDMwMjAwMDQiLCJjbGllbnRfaWQiOiJhbGxzb2Z0IiwiZXhwIjoxNzEwNjY4MTE0fQ.Z28h-r9rpZpWIymyOAvQ0xTZHaHeB-rIYFLlMyW3pso")
                 this.$router.push({
                     name: "file_management"
                 })
@@ -248,7 +243,7 @@ export default {
 }
 
 .main_div {
-    /* background-image: url("../../assets/bg_img_1.png"); */
+    background-image: url("../../src//assets/backgroundIMg.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
