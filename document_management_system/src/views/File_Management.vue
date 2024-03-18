@@ -223,6 +223,12 @@ export default {
                     this.text = "file saved"
                     this.timeout = 1000
                     this.snackbar = true
+                    this.selected_status = "",
+                    this.file_url = "",
+                    this.selected_department = ""
+                    this.date = "",
+                    this.selected_name = "",
+                    this.remarks = ""
                 })
                 .catch(error => {
                     // Handle error
