@@ -203,10 +203,10 @@ export default {
             // Construct the form data
             let data = new FormData();
             data.append("file", this.selected_file); // Append the file to FormData
-            data.append("data", JSON.stringify({  // Append other form data as JSON string
+            data.append("data", JSON.stringify({  
                 major_head: this.selected_status,
-                minor_head: this.selected_department,
-                document_date: formattedDate, // Use the formatted date
+                minor_head: this.selected_department ? this.selected_department : this.selected_name,
+                document_date: formattedDate, 
                 document_remarks: this.remarks,
                 tags: this.addChip(),
                 user_id: this.user_id

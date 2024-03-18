@@ -32,7 +32,14 @@ const router = new VueRouter({
     routes
 })
 
-new Vue({
-    router
-})
+// new Vue({
+//     router
+// })
+router.beforeEach((to, from, next) => {
+    let token = localStorage.getItem("access_token");
+    if (to.meta.requiresAuth === true && !token) {
+        router.push({ name: "login" });
+    } 
+    else next();
+});
 export default router;

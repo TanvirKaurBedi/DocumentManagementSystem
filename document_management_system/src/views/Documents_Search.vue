@@ -66,7 +66,13 @@
         </v-row>
         <v-row>
             <v-col md="12" class="d-flex align-center justify-center">
-                <v-btn color="#F2797B" class="white--text text-capitalize" @click="submitSearchForm()">Submit</v-btn>
+                <v-btn color="#F2797B" class="white--text text-capitalize mr-1" @click="submitSearchForm()">Submit</v-btn>
+                <v-btn color="primary" @click="logout()">Logout</v-btn>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col md="12" class="d-flex align-center justify-center">
+              
             </v-col>
         </v-row>
     </v-container>
@@ -117,6 +123,13 @@ export default {
         }
     },
     methods: {
+        logout(){
+            localStorage.removeItem('access_token')
+            localStorage.removeItem('user_id')
+            this.$router.push({
+                name:'login'
+            })
+        },
         addChip() {
             const words = this.inputText.trim().split(',');
             words.forEach(word => {
@@ -157,7 +170,7 @@ export default {
         submitSearchForm() {
             let data = {
                 major_head: this.selected_status,
-                minor_head: this.selected_department,
+                minor_head: this.selected_department ? this.selected_department : this.selected_name,
                 from_date: this.dates_2[0],
                 to_date: this.dates_2[1],
                 tags: this.addChip,
