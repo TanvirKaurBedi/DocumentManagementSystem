@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from "../views/Login.vue"
 import File_Management from "../views/File_Management.vue"
+import Documents_Search from "../views/Documents_Search.vue"
 
 Vue.use(VueRouter)
 const routes = [
@@ -15,8 +16,14 @@ const routes = [
     {
         path: "/file_management",
         name: "file_management",
-        meta: { requiresAuth: false, title: "File Management", show_back_btn: false },
+        meta: { requiresAuth: true, title: "File Management", show_back_btn: false },
         component: File_Management,
+    },
+    {
+        path: "/search_documents",
+        name: "search_documents",
+        meta: { requiresAuth: true, title: "File Management", show_back_btn: false },
+        component: Documents_Search,
     },
 ]
 

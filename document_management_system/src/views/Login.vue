@@ -99,6 +99,7 @@ export default {
             selected_phone_code: "+91",
             selected_flag: "https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg",
             switch_to_verify_page: false,
+            roles:[]
         }
     },
     watch: {
@@ -154,11 +155,18 @@ export default {
             this.verify_btn_loader = true
             const data = {
                 "mobile_number": this.mobile,
-                "otp": "541983"
+                "otp": this.otp_field
             }
-            const successHandler = () => {
+            const successHandler = (response) => {
                 this.verify_btn_loader = false
-               localStorage.setItem("access_token","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpcF9hZGRyZXNzIjoiOjoxIiwidW5pcXVlX2lkIjoiOTMwMzAyMDAwNCIsInVzZXJfbmFtZSI6IjkzMDMwMjAwMDQiLCJhY2Nlc3NfdHlwZSI6ImVtcCIsIm1vYmlsZSI6IjkzMDMwMjAwMDQiLCJjbGllbnRfaWQiOiJhbGxzb2Z0IiwiZXhwIjoxNzEwNjY4MTE0fQ.Z28h-r9rpZpWIymyOAvQ0xTZHaHeB-rIYFLlMyW3pso")
+                // console.log("response",response.data.data.token)
+                let token = response.data.data.token
+                let user_id = response.data.data.user_id
+                // let user_name = response.data.data.user_name
+                this.roles = response.data.data.roles
+               localStorage.setItem("access_token",token)
+               localStorage.setItem("user_id",user_id)
+
                 this.$router.push({
                     name: "file_management"
                 })
