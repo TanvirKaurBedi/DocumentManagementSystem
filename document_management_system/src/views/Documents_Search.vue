@@ -45,13 +45,8 @@
 
                 <template>
                     <v-row class="d-flex align-center justify-center">
-                        <v-text-field class="filter" dense outlined v-model="inputText" label="Tag name" @keydown.enter="addChip" style="width:259px"></v-text-field>
-                    </v-row>
-                    <v-row class="d-flex align-center justify-center mt-2 filter">
-                        <v-chip v-for="(chip, index) in chips" :key="index" class="ma-1" @click="removeChip(index)">
-                            {{ chip.tag_name }}
-                            <v-icon small>mdi-close</v-icon>
-                        </v-chip>
+                        <v-text-field class="filter" dense outlined v-model="inputText" label="Tag name"
+                            @keydown.enter="addChip" style="width:259px"></v-text-field>
                     </v-row>
                 </template>
 
@@ -60,7 +55,12 @@
             <!--  -->
             <v-col md="6" cols="12" class="d-flex align-center justify-center">
                 <v-row class="d-flex align-center justify-center">
-                    <p>Response Here</p>
+                    <v-data-table :headers="headers" :items="data" item-key="document_id" items-per-page="5">
+                        <template v-slot:[`item.file_url`]="{ item }">
+                            <a :href="item.file_url" target="_blank">Preview</a>
+                            <v-btn @click="downloadFile(item.file_url)" text>Download</v-btn>
+                        </template>
+                    </v-data-table>
                 </v-row>
             </v-col>
         </v-row>
@@ -94,7 +94,13 @@ export default {
             tags: [{ "tage_name": 'RMC' }],
             menu_2: "",
             dates_2: [],
-            chips:[]
+            chips: [],
+            headers: [
+                { text: 'Row Number', value: 'row_num' },
+                { text: 'Uploaded By', value: 'uploaded_by' },
+                { text: 'File URL', value: 'file_url', sortable: false },
+            ],
+            data: []
         }
     },
     mounted() {
@@ -112,68 +118,77 @@ export default {
     },
     methods: {
         addChip() {
-            if (this.inputText.trim() !== '') {
-                this.chips.push({"tag_name":this.inputText.trim()});
-                this.inputText = ''; // Clear the input field after adding the chip
-            }
+            const words = this.inputText.trim().split(',');
+            words.forEach(word => {
+                if (word.trim() !== '') {
+                    this.chips.push({ "tag_name": word.trim() });
+                }
+            });
+
+            this.inputText = '';
+            return this.chips
         },
         removeChip(index) {
             this.chips.splice(index, 1);
         },
-    triggerInputField() {
-        this.$refs.file_uploading_field.click();
-    },
-    fileChangeHandle() {
-        this.uploadFile();
-    },
-    deleteMedia() {
-        this.file_url = ""
-    },
-    uploadFile() {
-        this.selected_file = this.$refs.file_uploading_field.files[0];
-        this.file_type = this.selected_file.type
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            this.file_url = event.target.result;
+        triggerInputField() {
+            this.$refs.file_uploading_field.click();
+        },
+        fileChangeHandle() {
+            this.uploadFile();
+        },
+        deleteMedia() {
+            this.file_url = ""
+        },
+        uploadFile() {
+            this.selected_file = this.$refs.file_uploading_field.files[0];
+            this.file_type = this.selected_file.type
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                this.file_url = event.target.result;
 
-        };
-        reader.readAsDataURL(this.selected_file);
-    },
+            };
+            reader.readAsDataURL(this.selected_file);
+        },
+        downloadFile(fileUrl) {
+            window.open(fileUrl, '_blank');
+        },
 
-    submitSearchForm() {
-        let data = {
-            major_head: this.selected_status,
-            minor_head: this.selected_department,
-            from_date: this.dates_2[0],
-            to_date: this.dates_2[1],
-            tags: this.chips, // Corrected typo in tag_name
-            uploaded_by:this.user_id,
-            start: 0,
-            length:12,
-            // filterId: "",
-            search:{}
-        };
+        submitSearchForm() {
+            let data = {
+                major_head: this.selected_status,
+                minor_head: this.selected_department,
+                from_date: this.dates_2[0],
+                to_date: this.dates_2[1],
+                tags: this.addChip,
+                uploaded_by: this.user_id,
+                start: 0,
+                length: 10,
+                filterId: "",
+                search: { "value": "" }
+            };
 
-        let token = localStorage.getItem('access_token');
-        const headers = {
-            'token': token,
-        };
+            let token = localStorage.getItem('access_token');
+            const headers = {
+                'token': token,
+            };
 
-        axios.post("https://apis.allsoft.co/api/documentManagement/searchDocumentEntry", data, { headers })
-            .then(response => {
-                console.log('Response:', response.data);
-                this.verify_btn_loader = false;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                if (error) {
-                    this.otp_field = "";
+            axios.post("https://apis.allsoft.co/api/documentManagement/searchDocumentEntry", data, { headers })
+                .then(response => {
+                    console.log('Response:', response.data);
                     this.verify_btn_loader = false;
-                }
-            });
-    }
+                    this.data = response.data.data
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    if (error) {
+                        this.otp_field = "";
+                        this.verify_btn_loader = false;
+                    }
+                });
+        }
 
-},
+    },
 }
 </script>
 <style scoped>

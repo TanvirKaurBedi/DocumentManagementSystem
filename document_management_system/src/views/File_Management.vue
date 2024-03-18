@@ -14,7 +14,6 @@
         <v-row class="d-flex align-center" style="height:80vh">
 
             <v-col md="6" cols="12" class="d-flex flex-column align-center justify-center">
-
                 <v-row class="filter">
                     <v-select outlined clearable :items="status_items" dense label="status" v-model="selected_status"
                         class="filter">
@@ -48,24 +47,18 @@
                         </v-date-picker>
                     </v-menu>
                 </v-row>
+                <template>
+                    <v-row class="d-flex align-center justify-center">
+                        <v-text-field class="filter" dense outlined v-model="inputText" label="Tag name"
+                            style="width:259px"></v-text-field>
+                    </v-row>
+                </template>
 
                 <v-row class="d-flex align-center justify-center">
                     <v-textarea auto-grow outlined placeholder="add you remarks here" v-model="remarks"
                         prepend-inner-icon="mdi-comment" cols="23" row-height="8">
                     </v-textarea>
                 </v-row>
-                <template>
-                    <v-row class="d-flex align-center justify-center">
-                        <v-text-field class="filter" dense outlined v-model="inputText" label="Tag name" @keydown.enter="addChip" style="width:259px"></v-text-field>
-                    </v-row>
-                    <v-row class="d-flex align-center justify-center mt-2 filter">
-                        <v-chip v-for="(chip, index) in chips" :key="index" class="ma-1" @click="removeChip(index)">
-                            {{ chip.tag_name }}
-                            <v-icon small>mdi-close</v-icon>
-                        </v-chip>
-                    </v-row>
-                </template>
-
             </v-col>
             <v-spacer></v-spacer>
             <!--  -->
@@ -109,6 +102,11 @@
                 <v-btn color="#F2797B" class="white--text text-capitalize mt-n15" @click="submitForm()">Submit</v-btn>
             </v-col>
         </v-row>
+
+        <v-snackbar top right color="green" v-model="snackbar" :timeout="timeout">
+            {{ text }}
+
+        </v-snackbar>
     </v-container>
 </template>
 <script>
@@ -131,7 +129,11 @@ export default {
             selected_department: "",
             selected_name: "",
             user_id: "",
-            chips:[]
+            chips: [],
+            inputText: "",
+            snackbar:false,
+            text:"",
+            timeout:""
         }
     },
     mounted() {
@@ -149,11 +151,18 @@ export default {
     },
     methods: {
         addChip() {
-            if (this.inputText.trim() !== '') {
-                this.chips.push({"tag_name":this.inputText.trim()});
-                this.inputText = ''; // Clear the input field after adding the chip
-            }
+            const words = this.inputText.trim().split(',');
+            words.forEach(word => {
+                if (word.trim() !== '') {
+                    this.chips.push({ "tag_name": word.trim() });
+                }
+
+            });
+
+            this.inputText = '';
+            return this.chips
         },
+
         removeChip(index) {
             this.chips.splice(index, 1);
         },
@@ -199,7 +208,7 @@ export default {
                 minor_head: this.selected_department,
                 document_date: formattedDate, // Use the formatted date
                 document_remarks: this.remarks,
-                tags: this.chips,
+                tags: this.addChip(),
                 user_id: this.user_id
             }));
 
@@ -211,6 +220,9 @@ export default {
                 .then(response => {
                     // Handle successful response
                     console.log('Response:', response.data);
+                    this.text = "file saved"
+                    this.timeout = 1000
+                    this.snackbar = true
                 })
                 .catch(error => {
                     // Handle error
