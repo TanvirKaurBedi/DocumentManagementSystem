@@ -57,8 +57,9 @@
                 <v-row class="d-flex align-center justify-center">
                     <v-data-table :headers="headers" :items="data" item-key="document_id" items-per-page="5">
                         <template v-slot:[`item.file_url`]="{ item }">
-                            <a :href="item.file_url" target="_blank">Preview</a>
-                            <v-btn @click="downloadFile(item.file_url)" text>Download</v-btn>
+                            <a class="mr-2" :href="item.file_url" target="_blank">Preview</a>
+                            <a class="download_file" :href="item.file_url" download>DOWNLOAD
+                            </a>
                         </template>
                     </v-data-table>
                 </v-row>
@@ -66,13 +67,14 @@
         </v-row>
         <v-row>
             <v-col md="12" class="d-flex align-center justify-center">
-                <v-btn color="#F2797B" class="white--text text-capitalize mr-1" @click="submitSearchForm()">Submit</v-btn>
+                <v-btn color="#F2797B" class="white--text text-capitalize mr-1"
+                    @click="submitSearchForm()">Submit</v-btn>
                 <v-btn color="primary" @click="logout()">Logout</v-btn>
             </v-col>
         </v-row>
         <v-row>
             <v-col md="12" class="d-flex align-center justify-center">
-              
+
             </v-col>
         </v-row>
     </v-container>
@@ -123,11 +125,11 @@ export default {
         }
     },
     methods: {
-        logout(){
+        logout() {
             localStorage.removeItem('access_token')
             localStorage.removeItem('user_id')
             this.$router.push({
-                name:'login'
+                name: 'login'
             })
         },
         addChip() {
@@ -163,8 +165,16 @@ export default {
             };
             reader.readAsDataURL(this.selected_file);
         },
-        downloadFile(fileUrl) {
-            window.open(fileUrl, '_blank');
+        downloadFile(item) {
+            console.log(item)
+            // Create a temporary anchor element
+            var a = document.createElement("a");
+            a.href = item.file_url;
+            // Provide the desired filename here
+            document.body.appendChild(a);
+            a.click(); // Simulate a click on the anchor element
+            document.body.removeChild(a); // Clean up
+            return false; // Prevent the default behavior of the anchor tag
         },
 
         submitSearchForm() {
@@ -233,5 +243,11 @@ export default {
 
 .filter {
     max-width: 259px !important
+}
+
+.download_file {
+    color: black;
+    text-decoration: none;
+    font-weight: 500;
 }
 </style>
